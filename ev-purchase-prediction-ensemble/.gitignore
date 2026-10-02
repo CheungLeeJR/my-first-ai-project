@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+outputs/
+submission*.csv
+oof_predictions.csv
+model_comparison.csv
+run_summary.txt
+.DS_Store
