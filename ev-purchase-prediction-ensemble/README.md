@@ -93,3 +93,9 @@ Leaderboard feedback is noisy and can encourage accidental overfitting. This pro
 - Add repeated-CV stability analysis and calibration diagnostics
 - Add SHAP-based feature diagnostics and error slices
 - Tune only inside CV (for example with constrained Optuna search)
+
+## Portfolio verification
+
+- Reusable pipeline tests: **3 passed** during portfolio cleanup.
+- Generated submissions and row-level OOF predictions are ignored by Git.
+- Performance reporting distinguishes the verified earlier public score (**0.94156**) from the stronger V2 code path, whose leaderboard result was not present in the supplied artifacts.
