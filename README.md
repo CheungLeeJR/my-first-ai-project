@@ -1,38 +1,39 @@
-# DSAI Project Portfolio
+# DSAI Research Project Portfolio
 
-A curated collection of Data Science, AI, machine-learning, and algorithmic projects. The repositories were cleaned for reproducibility, testability, and public review rather than uploaded as raw coursework folders.
+A research-oriented portfolio of four Data Science, AI, machine-learning, and algorithmic projects. The repository is organized to make the **research question, experimental design, evidence boundary, reproducibility path, and limitations** explicit rather than presenting code alone.
 
-## Featured projects
+## Projects
 
-| Project | Focus | Key engineering / ML ideas | Verification |
+| Project | Research framing | Current evidence | Status |
 |---|---|---|---|
-| [HKMU AI Study Assistant](./hkmu-ai-study-assistant) | RAG / AI engineering | Multi-PDF retrieval, FAISS, SQLite, OCR fallback, citations, deterministic fake-provider tests | 3 local tests passed |
-| [EV Purchase Prediction](./ev-purchase-prediction-ensemble) | Tabular ML / Kaggle | 5-fold OOF, leakage-safe preprocessing, nested target encoding, LightGBM/CatBoost ensemble | 3 local tests passed; earlier verified public score 0.94156 |
-| [Kaggriculture Tournament Agent](./kaggriculture-tournament-agent) | Agent / optimization | Task scheduling, logistics, resource allocation, market timing, opponent-aware policy | 6 local tests passed |
-| [Caregiver Interest Model Reproduction](./caregiver-interest-model-reproduction) | Research reproduction / imbalanced classification | Fold-local undersampling, CatBoost CV, aggregate evaluation, privacy-by-default outputs | 4 local tests passed |
+| [HKMU AI Study Assistant](./hkmu-ai-study-assistant) | Retrieval-augmented generation for multi-document study support | Deterministic system tests; evaluation harness added for retrieval/citation metrics | Research prototype |
+| [EV Purchase Prediction](./ev-purchase-prediction-ensemble) | Leakage-safe tabular prediction and ensemble selection | 5-fold OOF design; earlier verified public score 0.94156; V2 result not yet re-verified | Reproducible competition study |
+| [Kaggriculture Tournament Agent](./kaggriculture-tournament-agent) | Heuristic policy design for sequential resource allocation | Policy invariants and safety tests; benchmark/ablation protocol defined | Algorithmic research prototype |
+| [Caregiver Interest Model Reproduction](./caregiver-interest-model-reproduction) | Imbalanced binary classification reproduction | 5-fold aggregate metrics comparing unbalanced vs fold-local undersampling | Research reproduction |
 
-## Portfolio-wide quality controls
+## Shared research standard
 
-- Public-facing README and reproducibility instructions for every project
-- Unit tests that avoid requiring private competition/research data where possible
-- Root GitHub Actions workflow covering all four projects
-- `.gitignore` rules for generated artifacts, secrets, local databases, and row-level outputs
-- Explicit evidence boundaries: no leaderboard/model-performance claims beyond supplied artifacts
-- Restricted caregiver participant-level data intentionally excluded from the public repository
+Every project now documents:
 
-## Project map
+1. **Research question / hypothesis** — what is being tested and what is not.
+2. **Methodology** — data flow, model/policy design, and leakage controls.
+3. **Evaluation protocol** — primary metrics, baselines, ablations, and failure criteria.
+4. **Reproducibility** — deterministic seeds where applicable, environment/dependency records, tests, and run artifacts.
+5. **Evidence boundary** — measured results are separated from proposed experiments and future improvements.
+6. **Limitations / responsible use** — no causal, clinical, or real-world claims are inferred from competition/reproduction results.
+7. **Data governance** — secrets, restricted research data, row-level sensitive outputs, local databases, and generated artifacts are excluded from public Git history.
 
-```text
-.
-├── hkmu-ai-study-assistant/
-├── ev-purchase-prediction-ensemble/
-├── kaggriculture-tournament-agent/
-├── caregiver-interest-model-reproduction/
-└── .github/workflows/portfolio-ci.yml
-```
+See [`RESEARCH_STANDARDS.md`](./RESEARCH_STANDARDS.md) for the portfolio-wide checklist.
 
-## Notes
+## Reproduce / verify
 
-The caregiver project is published as a **sanitized code + aggregate-results reproduction**. The raw research dataset, rebuilt participant-level dataset, and row-level OOF predictions are not included.
+The root GitHub Actions workflow runs the dependency-appropriate test suite for all four projects. Locally, enter a project directory and follow its `REPRODUCIBILITY.md`.
 
-For the EV project, the supplied history supports a public score of **0.94156** for the earlier stable pipeline. The stronger V2 code is included, but no unsupported leaderboard score is claimed for it.
+## Evidence policy
+
+This portfolio intentionally does **not** convert unverified ideas into claims. In particular:
+
+- the EV V2 pipeline is presented as a stronger experimental code path, not as a verified leaderboard improvement;
+- the Kaggriculture agent has no fabricated tournament-score distribution;
+- the RAG project has an evaluation protocol/harness but no invented retrieval-quality benchmark;
+- the caregiver reproduction reports aggregate results only and excludes participant-level records.
