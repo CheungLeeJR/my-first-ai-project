@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+outputs/
+raw/
+data/
+*raw*.csv
+*dataset*.csv
+*OOF_Predictions*.csv
+.DS_Store
