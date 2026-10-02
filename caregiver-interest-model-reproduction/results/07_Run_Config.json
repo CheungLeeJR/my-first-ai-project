@@ -1,0 +1,15 @@
+{
+  "raw_file": "[not included: restricted research data]",
+  "final_rows": 954,
+  "class_counts": {
+    "0": 700,
+    "1": 254
+  },
+  "cv": "StratifiedKFold(n_splits=5, shuffle=True, random_state=42)",
+  "balancing": "Random undersampling in training fold only, 1:1",
+  "validation": "unchanged original class distribution",
+  "model": "CatBoost All35",
+  "threshold": 0.5,
+  "row_level_artifacts_written": false,
+  "note": "Numeric missing values are handled natively by CatBoost. No validation-fold statistics are used for preprocessing."
+}
