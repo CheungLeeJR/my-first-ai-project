@@ -1,6 +1,0 @@
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-addopts = "-q"
-markers = [
-  "integration: tests that exercise the full RAG stack and optional runtime dependencies",
-]

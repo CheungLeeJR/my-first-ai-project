@@ -1,51 +1,43 @@
-# Portfolio Research Standards
+# Research Portfolio Standards
 
-This checklist is used across the portfolio to keep projects suitable for supervisor review, research applications, and later conversion into formal experiments.
+The featured projects in this portfolio use the following standard for research preparation and review.
 
-## 1. Problem formulation
+## 1. Research question first
 
-- State a concrete research question or engineering hypothesis.
-- Separate prediction/association from causal claims.
-- Define the intended scope and the non-goals.
+Each project should state a concrete question that can be evaluated rather than describing only a software feature.
 
-## 2. Experimental design
+## 2. Testable hypotheses
 
-- Identify baselines and meaningful ablations.
-- Fit all learned preprocessing only on training partitions.
-- Keep validation/test information outside model-selection steps.
-- Use fixed, documented random seeds when stochastic procedures are involved.
-- Report the primary metric before inspecting final external evaluation when possible.
+Hypotheses are labelled as hypotheses until supported by experiment results. Planned improvements are not written as measured gains.
 
-## 3. Reproducibility
+## 3. Explicit baselines and ablations
 
-- Provide environment/dependency files and a single documented entry point.
-- Record seeds, fold count, data dimensions, model configuration, and package versions in generated run metadata where practical.
-- Keep tests independent of restricted datasets where possible.
-- Preserve generated results separately from source code.
+Where applicable, projects identify simpler baselines and controlled ablations so the effect of individual design choices can be studied.
 
-## 4. Result reporting
+## 4. Leakage-aware evaluation
 
-- Distinguish **measured evidence**, **interpretation**, and **future hypotheses**.
-- Report variability across folds/seeds when available, not only a single best number.
-- Avoid claiming generalization beyond the evaluation population/environment.
-- Do not present leaderboard optimization as scientific external validity.
+Machine-learning evaluation keeps learned preprocessing inside the training fold. Competition leaderboard feedback is treated as an external check rather than a substitute for validation design.
 
-## 5. Data governance and responsible use
+## 5. Reproducibility
 
-- Never commit credentials, raw restricted participant records, or unnecessary row-level research outputs.
-- Document whether data are public, competition-provided, synthetic, local, or restricted.
-- For human-participant or potentially sensitive data, publish only what is authorized by the data owner/supervisor.
-- Do not imply clinical, admissions, lending, employment, or other high-impact suitability without appropriate validation and governance.
+Projects should record the relevant random seed, fold configuration, package/runtime versions, input fingerprints or data version, and generated experiment metadata where practical.
 
-## 6. Research-readiness review before using a project in an application
+## 6. Evidence ledger
 
-A project should be able to answer, in a few minutes:
+Verified historical results, current reproducible measurements, and future experiments are clearly separated. Unsupported performance claims are avoided.
 
-- What is the question?
-- What is the baseline?
-- What changed?
-- How was leakage/confounding controlled?
-- What metric tests the hypothesis?
-- What evidence has actually been measured?
-- What failed or remains uncertain?
-- Can another person reproduce the result with authorized data?
+## 7. Tests are not research results
+
+Unit and integration tests establish software invariants and implementation correctness. They do not by themselves establish empirical model quality or superiority.
+
+## 8. Limitations and external validity
+
+Each research-facing project describes where conclusions do not generalize—for example from synthetic competition data to real deployment or from a local RAG benchmark to broad educational effectiveness.
+
+## 9. Data governance
+
+Raw restricted data, participant-level derived datasets, direct identifiers, private documents, secrets, and row-level predictions are excluded from public repositories unless publication is explicitly authorized.
+
+## 10. Reproducible next step
+
+Future research work should be framed as an experiment that can be run, recorded, compared, and reviewed—not simply as a feature wishlist.

@@ -1,39 +1,51 @@
-# DSAI Research Project Portfolio
+# Data Science & AI Research Portfolio
 
-A research-oriented portfolio of four Data Science, AI, machine-learning, and algorithmic projects. The repository is organized to make the **research question, experimental design, evidence boundary, reproducibility path, and limitations** explicit rather than presenting code alone.
+A research-oriented portfolio of selected machine-learning, RAG, sequential-decision, and applied data-science projects. Each substantial project now lives in its own repository so its research question, implementation, evidence, tests, and reproducibility history can be reviewed independently.
 
-## Projects
+## Featured research projects
 
-| Project | Research framing | Current evidence | Status |
-|---|---|---|---|
-| [HKMU AI Study Assistant](./hkmu-ai-study-assistant) | Retrieval-augmented generation for multi-document study support | Deterministic system tests; evaluation harness added for retrieval/citation metrics | Research prototype |
-| [EV Purchase Prediction](./ev-purchase-prediction-ensemble) | Leakage-safe tabular prediction and ensemble selection | 5-fold OOF design; earlier verified public score 0.94156; V2 result not yet re-verified | Reproducible competition study |
-| [Kaggriculture Tournament Agent](./kaggriculture-tournament-agent) | Heuristic policy design for sequential resource allocation | Policy invariants and safety tests; benchmark/ablation protocol defined | Algorithmic research prototype |
-| [Caregiver Interest Model Reproduction](./caregiver-interest-model-reproduction) | Imbalanced binary classification reproduction | 5-fold aggregate metrics comparing unbalanced vs fold-local undersampling | Research reproduction |
+### 1. HKMU AI Study Assistant
+**Multi-document RAG · Retrieval evaluation · Citation traceability · OCR**
 
-## Shared research standard
+Persistent conversational RAG for course PDFs using FAISS, SQLite, OCR fallback, page-level citations, and deterministic tests. The research layer defines retrieval/citation hypotheses and an offline evaluator for Recall@k, Hit Rate@k, MRR, and citation precision/recall/F1.
 
-Every project now documents:
+➡️ https://github.com/CheungLeeJR/hkmu-ai-study-assistant
 
-1. **Research question / hypothesis** — what is being tested and what is not.
-2. **Methodology** — data flow, model/policy design, and leakage controls.
-3. **Evaluation protocol** — primary metrics, baselines, ablations, and failure criteria.
-4. **Reproducibility** — deterministic seeds where applicable, environment/dependency records, tests, and run artifacts.
-5. **Evidence boundary** — measured results are separated from proposed experiments and future improvements.
-6. **Limitations / responsible use** — no causal, clinical, or real-world claims are inferred from competition/reproduction results.
-7. **Data governance** — secrets, restricted research data, row-level sensitive outputs, local databases, and generated artifacts are excluded from public Git history.
+### 2. EV Purchase Prediction
+**Leakage-safe ML · OOF validation · Nested target encoding · LightGBM/CatBoost**
 
-See [`RESEARCH_STANDARDS.md`](./RESEARCH_STANDARDS.md) for the portfolio-wide checklist.
+Research-oriented competition pipeline focused on experimental validity: fold-local preprocessing, nested cross-fitted target encoding, OOF-only ensemble selection, reproducibility metadata, input fingerprints, and explicit evidence boundaries.
 
-## Reproduce / verify
+➡️ https://github.com/CheungLeeJR/ev-purchase-prediction
 
-The root GitHub Actions workflow runs the dependency-appropriate test suite for all four projects. Locally, enter a project directory and follow its `REPRODUCIBILITY.md`.
+### 3. Kaggriculture Tournament Agent
+**Sequential decision making · Resource allocation · Scheduling · Ablation design**
+
+A deterministic standard-library tournament agent combining spatial planning, multi-worker scheduling, production logistics, market timing, and opponent-aware rules. The research protocol defines matched-seed ablations rather than claiming performance from unit tests alone.
+
+➡️ https://github.com/CheungLeeJR/kaggriculture-tournament-agent
+
+### 4. Caregiver Service-Interest Classification
+**Imbalanced classification · Reproduction study · CatBoost · Data governance**
+
+A privacy-conscious reproduction pipeline comparing original imbalanced training with fold-local 1:1 undersampling. The public repository contains code and aggregate evidence only; participant-level source data and row-level predictions are excluded.
+
+➡️ https://github.com/CheungLeeJR/caregiver-interest-model-reproduction
+
+## Other selected projects
+
+- **AI Research Trend Mining** — https://github.com/CheungLeeJR/AI-Research-Trend-Mining
+- **FoodBridge** — https://github.com/CheungLeeJR/foodbridge-project
+- **Lost & Found Project** — https://github.com/CheungLeeJR/Lost_and_found_project
+
+## Research standard
+
+The featured repositories are structured around a common evidence chain:
+
+**Research question → hypothesis → method → baseline/ablation → evaluation → reproducibility → evidence → limitations → data governance**
+
+See [`RESEARCH_STANDARDS.md`](./RESEARCH_STANDARDS.md) for the portfolio-wide standard.
 
 ## Evidence policy
 
-This portfolio intentionally does **not** convert unverified ideas into claims. In particular:
-
-- the EV V2 pipeline is presented as a stronger experimental code path, not as a verified leaderboard improvement;
-- the Kaggriculture agent has no fabricated tournament-score distribution;
-- the RAG project has an evaluation protocol/harness but no invented retrieval-quality benchmark;
-- the caregiver reproduction reports aggregate results only and excludes participant-level records.
+This portfolio distinguishes verified results from planned experiments. Competition scores are not presented as real-world validity, engineering tests are not presented as empirical research results, and restricted participant-level data are not published.
