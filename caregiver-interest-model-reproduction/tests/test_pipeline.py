@@ -33,3 +33,12 @@ def test_float_parser_handles_blanks():
     assert to_float("3.5") == 3.5
     assert np.isnan(to_float(""))
     assert np.isnan(to_float("N/A"))
+
+
+def test_balancing_is_reproducible_for_same_seed():
+    y = np.array([0] * 12 + [1] * 6)
+    train_idx = np.arange(len(y))
+    left = balanced_training_indices(y, train_idx, fold=1, seed=123)
+    right = balanced_training_indices(y, train_idx, fold=1, seed=123)
+    assert np.array_equal(left, right)
+    assert (y[left] == 0).sum() == (y[left] == 1).sum()

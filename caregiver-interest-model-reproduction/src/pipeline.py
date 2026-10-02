@@ -231,10 +231,7 @@ def load_authorized_dataset(path: Path) -> tuple[pd.DataFrame, dict]:
     with path.open(encoding="utf-8-sig", newline="") as handle:
         raw_all = list(csv.DictReader(handle))
 
-    raw = [
-        row for row in raw_all
-        if to_float(row.get(TARGET, "")) in (0, 1) and to_float(row.get(DISTANCE, "")) != 999
-    ]
+    raw = [row for row in raw_all if to_float(row.get(TARGET, "")) in (0, 1) and to_float(row.get(DISTANCE, "")) != 999]
     frame = pd.DataFrame([build_features(row) for row in raw])
     for column in CATEGORICAL:
         frame[column] = frame[column].map(canonical_category)
@@ -249,13 +246,7 @@ def load_authorized_dataset(path: Path) -> tuple[pd.DataFrame, dict]:
         "target_999": int((raw_target == 999).sum()),
         "target_0": int((raw_target == 0).sum()),
         "target_1": int((raw_target == 1).sum()),
-        "removed_labeled_distance_999": int(
-            sum(
-                to_float(row.get(TARGET, "")) in (0, 1)
-                and to_float(row.get(DISTANCE, "")) == 999
-                for row in raw_all
-            )
-        ),
+        "removed_labeled_distance_999": int(sum(to_float(row.get(TARGET, "")) in (0, 1) and to_float(row.get(DISTANCE, "")) == 999 for row in raw_all)),
         "final_rows": len(frame),
         "final_0": int((y == 0).sum()),
         "final_1": int((y == 1).sum()),
@@ -263,8 +254,8 @@ def load_authorized_dataset(path: Path) -> tuple[pd.DataFrame, dict]:
     return frame, audit
 
 
-def balanced_training_indices(y: np.ndarray, train_idx: np.ndarray, fold: int) -> np.ndarray:
-    rng = np.random.default_rng(4200 + fold)
+def balanced_training_indices(y: np.ndarray, train_idx: np.ndarray, fold: int, seed: int = 42) -> np.ndarray:
+    rng = np.random.default_rng(seed * 100 + fold)
     class0 = train_idx[y[train_idx] == 0]
     class1 = train_idx[y[train_idx] == 1]
     n = min(len(class0), len(class1))
@@ -285,27 +276,25 @@ def catboost_frame(frame: pd.DataFrame, indices: np.ndarray):
     return x, categorical_indices
 
 
-def run_cv(frame: pd.DataFrame, strategy: str):
+def run_cv(frame: pd.DataFrame, strategy: str, seed: int = 42, n_splits: int = 5, threshold: float = 0.50):
     from catboost import CatBoostClassifier
 
     y = frame[TARGET].astype(int).to_numpy()
-    cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+    cv = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=seed)
     fold_metrics, audits = [], []
     oof = np.full(len(frame), np.nan)
 
     for fold, (train_idx, valid_idx) in enumerate(cv.split(frame, y), 1):
-        fit_idx = balanced_training_indices(y, train_idx, fold) if strategy == "Balanced" else train_idx
-        audits.append(
-            {
-                "Fold": fold,
-                "Train_0_before": int((y[train_idx] == 0).sum()),
-                "Train_1_before": int((y[train_idx] == 1).sum()),
-                "Train_0_after": int((y[fit_idx] == 0).sum()),
-                "Train_1_after": int((y[fit_idx] == 1).sum()),
-                "Validation_0": int((y[valid_idx] == 0).sum()),
-                "Validation_1": int((y[valid_idx] == 1).sum()),
-            }
-        )
+        fit_idx = balanced_training_indices(y, train_idx, fold, seed=seed) if strategy == "Balanced" else train_idx
+        audits.append({
+            "Fold": fold,
+            "Train_0_before": int((y[train_idx] == 0).sum()),
+            "Train_1_before": int((y[train_idx] == 1).sum()),
+            "Train_0_after": int((y[fit_idx] == 0).sum()),
+            "Train_1_after": int((y[fit_idx] == 1).sum()),
+            "Validation_0": int((y[valid_idx] == 0).sum()),
+            "Validation_1": int((y[valid_idx] == 1).sum()),
+        })
         x_train, categorical_indices = catboost_frame(frame, fit_idx)
         x_valid, _ = catboost_frame(frame, valid_idx)
         model = CatBoostClassifier(
@@ -316,27 +305,25 @@ def run_cv(frame: pd.DataFrame, strategy: str):
             random_strength=2,
             bagging_temperature=0.5,
             loss_function="Logloss",
-            random_seed=42,
+            random_seed=seed,
             verbose=False,
             allow_writing_files=False,
         )
         model.fit(x_train, y[fit_idx], cat_features=categorical_indices)
         probabilities = model.predict_proba(x_valid)[:, 1]
         oof[valid_idx] = probabilities
-        predicted = (probabilities >= 0.50).astype(int)
-        fold_metrics.append(
-            {
-                "Strategy": strategy,
-                "Fold": fold,
-                "Accuracy": accuracy_score(y[valid_idx], predicted),
-                "ROC_AUC": roc_auc_score(y[valid_idx], probabilities),
-                "Precision": precision_score(y[valid_idx], predicted, zero_division=0),
-                "Recall": recall_score(y[valid_idx], predicted, zero_division=0),
-                "F1": f1_score(y[valid_idx], predicted, zero_division=0),
-            }
-        )
+        predicted = (probabilities >= threshold).astype(int)
+        fold_metrics.append({
+            "Strategy": strategy,
+            "Fold": fold,
+            "Accuracy": accuracy_score(y[valid_idx], predicted),
+            "ROC_AUC": roc_auc_score(y[valid_idx], probabilities),
+            "Precision": precision_score(y[valid_idx], predicted, zero_division=0),
+            "Recall": recall_score(y[valid_idx], predicted, zero_division=0),
+            "F1": f1_score(y[valid_idx], predicted, zero_division=0),
+        })
 
-    predicted = (oof >= 0.50).astype(int)
+    predicted = (oof >= threshold).astype(int)
     matrix = confusion_matrix(y, predicted)
     return pd.DataFrame(fold_metrics), pd.DataFrame(audits), oof, predicted, matrix
 

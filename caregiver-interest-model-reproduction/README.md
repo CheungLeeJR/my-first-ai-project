@@ -85,3 +85,11 @@ Excluded:
 - names, contact details, addresses, free text, or other direct identifiers.
 
 The public code package is intentionally designed so the restricted dataset is **not required to inspect or test the core engineering work**.
+
+## Research preparation
+
+- Research questions and imbalance experiment design: [`RESEARCH_PROTOCOL.md`](./RESEARCH_PROTOCOL.md)
+- Seed/fold/threshold controls: [`REPRODUCIBILITY.md`](./REPRODUCIBILITY.md)
+- Aggregate result interpretation: [`RESULTS.md`](./RESULTS.md)
+
+The public release remains aggregate-only and does not claim external validity or individual decision suitability.
