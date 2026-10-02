@@ -103,6 +103,14 @@ Do not commit course PDFs, API keys, or generated local databases.
 
 ## Portfolio verification
 
-- Local dependency-light/core test run: **3 passed** during portfolio cleanup.
+- Local dependency-light/core test run: **5 passed** during portfolio cleanup.
 - Runtime secrets, uploaded PDFs, local FAISS indexes, SQLite databases, and logs are excluded from Git.
 - The repository avoids claiming retrieval quality beyond what has actually been evaluated; a labelled RAG benchmark remains a future improvement.
+
+## Research preparation
+
+- Research questions and hypotheses: [`RESEARCH_PROTOCOL.md`](./RESEARCH_PROTOCOL.md)
+- Reproducibility/evaluation workflow: [`REPRODUCIBILITY.md`](./REPRODUCIBILITY.md)
+- Offline retrieval/citation evaluator: `scripts/evaluate_retrieval.py`
+
+The project is presented as a **research prototype** until a labelled retrieval/answer benchmark is run; no retrieval-quality number is invented.

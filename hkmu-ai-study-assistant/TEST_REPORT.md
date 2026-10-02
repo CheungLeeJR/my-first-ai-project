@@ -6,7 +6,8 @@ The dependency-light core test suite passes in the packaging environment:
 
 - citation marker sanitization and coverage calculation;
 - SQLite document/chunk persistence and cascade deletion;
-- chat-message persistence.
+- chat-message persistence;
+- offline retrieval/citation metric calculations.
 
 The full end-to-end RAG integration tests remain in `tests/test_system.py`. They exercise PDF parsing, FAISS persistence, duplicate detection, retrieval, citations, and selective query rewriting. Those tests automatically skip when optional runtime packages such as LangChain/FAISS are absent and run normally in GitHub Actions after `requirements.txt` is installed.
 
