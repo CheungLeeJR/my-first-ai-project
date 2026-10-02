@@ -1,4 +1,5 @@
 import os, gc, time, json, traceback, warnings
+from reproducibility import environment_metadata, file_sha256
 from pathlib import Path
 warnings.filterwarnings('ignore')
 import numpy as np, pandas as pd
@@ -12,7 +13,7 @@ except Exception as e:
     CAT_OK=False; CAT_IMPORT_ERR=repr(e)
 
 ROOT=Path(os.getenv('KAGGLE_INPUT_ROOT', '/kaggle/input')); OUT=Path(os.getenv('OUTPUT_DIR', '/kaggle/working')); OUT.mkdir(parents=True, exist_ok=True)
-TARGET='Will_Buy_EV'; ID='id'; NF=5; SEED=42; THREADS=max(1,min(8,os.cpu_count() or 4))
+TARGET='Will_Buy_EV'; ID='id'; NF=int(os.getenv('CV_FOLDS','5')); SEED=int(os.getenv('EXPERIMENT_SEED','42')); THREADS=max(1,min(8,os.cpu_count() or 4))
 
 def find_data():
     req=['train.csv','test.csv','sample_submission.csv']; cand=[]
@@ -26,6 +27,14 @@ def find_data():
     return sorted(cand,key=lambda z:(z[0],str(z[1])),reverse=True)[0][1]
 D=find_data(); print('DATA_DIR',D)
 tr=pd.read_csv(D/'train.csv'); te=pd.read_csv(D/'test.csv'); sub0=pd.read_csv(D/'sample_submission.csv')
+run_metadata = environment_metadata()
+run_metadata.update({
+    'seed': SEED,
+    'cv_folds': NF,
+    'data_dir_name': D.name,
+    'input_sha256': {name: file_sha256(D/name) for name in ['train.csv','test.csv','sample_submission.csv']},
+    'catboost_available': CAT_OK,
+})
 assert TARGET in tr and ID in tr and ID in te
 features=[c for c in tr if c not in [TARGET,ID]]
 assert features==[c for c in te if c!=ID]
@@ -34,6 +43,8 @@ assert tr[ID].is_unique and te[ID].is_unique
 raw=tr[TARGET]
 y=(raw.astype(str).str.lower().map({'yes':1,'no':0}) if raw.dtype=='object' else raw).astype('int8').to_numpy()
 print('shapes',tr.shape,te.shape,sub0.shape,'target_rate',y.mean())
+run_metadata.update({'train_shape': list(tr.shape), 'test_shape': list(te.shape), 'submission_shape': list(sub0.shape), 'target_rate': float(y.mean())})
+(OUT/'run_metadata.json').write_text(json.dumps(run_metadata, indent=2, sort_keys=True), encoding='utf-8')
 print('missing',int(tr.isna().sum().sum()),int(te.isna().sum().sum()))
 
 # Synthetic-pattern and domain features. No labels are used here.

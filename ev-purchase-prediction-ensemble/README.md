@@ -80,6 +80,7 @@ The full competition pipeline writes:
 - `oof_predictions.csv`
 - `model_comparison.csv`
 - `run_summary.txt`
+- `run_metadata.json`
 
 Generated submissions and row-level OOF files are excluded from Git by default.
 
@@ -96,6 +97,14 @@ Leaderboard feedback is noisy and can encourage accidental overfitting. This pro
 
 ## Portfolio verification
 
-- Reusable pipeline tests: **3 passed** during portfolio cleanup.
+- Reusable pipeline tests: **5 passed** during portfolio cleanup.
 - Generated submissions and row-level OOF predictions are ignored by Git.
 - Performance reporting distinguishes the verified earlier public score (**0.94156**) from the stronger V2 code path, whose leaderboard result was not present in the supplied artifacts.
+
+## Research preparation
+
+- Experimental questions and ablations: [`RESEARCH_PROTOCOL.md`](./RESEARCH_PROTOCOL.md)
+- Reproduction controls and run metadata: [`REPRODUCIBILITY.md`](./REPRODUCIBILITY.md)
+- Verified-vs-pending evidence ledger: [`RESULTS.md`](./RESULTS.md)
+
+A full run now records seed, fold count, package versions, data dimensions, and SHA-256 input fingerprints in `run_metadata.json`.
