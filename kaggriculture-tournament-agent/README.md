@@ -72,3 +72,9 @@ The strategy remains one self-contained `agent.py` because tournament platforms 
 - Build a lightweight local simulator/trace harness
 - Replace hand-tuned task priorities with offline search or bandit tuning
 - Record strategy variants and score distributions across seeds/opponents
+
+## Portfolio verification
+
+- Policy/safety test suite: **6 passed** during portfolio cleanup.
+- The agent remains standard-library-only at runtime.
+- `scripts/inspect_policy.py` provides an offline way to inspect declared layout and market-curve behavior without the tournament environment.
