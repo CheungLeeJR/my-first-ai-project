@@ -100,3 +100,9 @@ Do not commit course PDFs, API keys, or generated local databases.
 - Add reranking for harder multi-document questions
 - Add model/provider abstraction and cost controls
 - Deploy a public demo using sample, non-copyrighted documents
+
+## Portfolio verification
+
+- Local dependency-light/core test run: **3 passed** during portfolio cleanup.
+- Runtime secrets, uploaded PDFs, local FAISS indexes, SQLite databases, and logs are excluded from Git.
+- The repository avoids claiming retrieval quality beyond what has actually been evaluated; a labelled RAG benchmark remains a future improvement.
