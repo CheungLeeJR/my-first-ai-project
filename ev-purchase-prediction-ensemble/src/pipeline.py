@@ -23,7 +23,7 @@ class DataBundle:
 
 def encode_target(series: pd.Series) -> np.ndarray:
     """Normalize the competition target to an integer 0/1 array."""
-    if series.dtype == object or str(series.dtype).startswith("string"):
+    if pd.api.types.is_string_dtype(series.dtype) or series.dtype == object:
         mapped = series.astype(str).str.strip().str.lower().map({"yes": 1, "no": 0})
         if mapped.isna().any():
             bad = sorted(series[mapped.isna()].astype(str).unique().tolist())[:5]
