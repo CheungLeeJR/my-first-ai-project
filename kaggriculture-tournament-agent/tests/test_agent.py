@@ -31,11 +31,7 @@ def test_long_term_roles_are_disjoint_and_exclude_animal_sites():
 
 
 def test_final_agent_fallback_matches_visible_hand_count():
-    obs = {
-        "player": 0,
-        "farms": [{"hands": [[0, 0], [1, 1]], "tiles": []}],
-        "private": {},
-    }
+    obs = {"player": 0, "farms": [{"hands": [[0, 0], [1, 1]], "tiles": []}], "private": {}}
     result = agent.agent(obs)
     assert set(result) == {"farmer", "hands", "market"}
     assert len(result["hands"]) == 2
@@ -45,3 +41,8 @@ def test_safe_sell_never_exceeds_available_stock():
     for item in agent.SALEABLE:
         qty = agent._safe_sell_qty(item, stock=7, start_inventory=10000, market={}, day=10)
         assert 0 <= qty <= 7
+
+
+def test_same_observation_is_deterministic():
+    obs = {"player": 0, "farms": [{"hands": [], "tiles": []}], "private": {}}
+    assert agent.agent(obs) == agent.agent(obs)

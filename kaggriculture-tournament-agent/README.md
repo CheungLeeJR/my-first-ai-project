@@ -75,6 +75,14 @@ The strategy remains one self-contained `agent.py` because tournament platforms 
 
 ## Portfolio verification
 
-- Policy/safety test suite: **6 passed** during portfolio cleanup.
+- Policy/safety test suite: **7 passed** during portfolio cleanup.
 - The agent remains standard-library-only at runtime.
 - `scripts/inspect_policy.py` provides an offline way to inspect declared layout and market-curve behavior without the tournament environment.
+
+## Research preparation
+
+- Episode-level hypotheses and ablation plan: [`RESEARCH_PROTOCOL.md`](./RESEARCH_PROTOCOL.md)
+- Determinism and current reproduction boundary: [`REPRODUCIBILITY.md`](./REPRODUCIBILITY.md)
+- Evidence ledger: [`RESULTS.md`](./RESULTS.md)
+
+Unit tests establish policy invariants; tournament-effect claims are deferred until matched-seed simulation/replay experiments are available.
